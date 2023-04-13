@@ -1,1 +1,11 @@
 .env
+
+apache/logs/*
+!apache/logs/.gitkeep
+
+mariadb/conf/*
+!mariadb/conf/.gitkeep
+mariadb/data/*
+!mariadb/data/.gitkeep
+mariadb/logs/*
+!mariadb/logs/.gitkeep
