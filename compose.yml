@@ -51,6 +51,7 @@ services:
       MYSQL_PASSWORD: "${MS_PASSWD}"
   apache:
     image: "rnf-php-apache-with-ext:latest"
+    build: ./apache
     restart: "always"
     depends_on:
       - mariadb
