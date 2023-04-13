@@ -1,16 +1,19 @@
 version: '3'
+name: routenotfound
 networks:
-  default:
-    external:
-      name: public
+  rnf:
+    name: route-not-found
+    enable_ipv6: false
 services:
   postgrest:
     image: postgrest/postgrest
     restart: "always"
     ports:
       - "7500:3000"
+    networks:
+      - rnf
     environment:
-      PGRST_DB_URI: postgres://pdb_user:pdb_passwd@postgres:5432/rnf_staging
+      PGRST_DB_URI: "postgres://${PG_USER}:${PG_PASSWD}@postgres:5432/rnf_location"
       PGRST_DB_ANON_ROLE: web_requests
       PGRST_DB_SCHEMAS: public
       PGRST_DB_CONFIG: 1
@@ -22,26 +25,30 @@ services:
     restart: "always"
     ports:
       - "5432:5432"
+    networks:
+      - rnf
     environment:
-      POSTGRES_DB: rnf_staging
-      POSTGRES_USER: pdb_user
-      POSTGRES_PASSWORD: pdb_passwd
+      POSTGRES_DB: rnf_location
+      POSTGRES_USER: "${PG_USER}"
+      POSTGRES_PASSWORD: "${PG_PASSWD"
     volumes:
-    - /mnt/storage/services/rnf-dev/pg-data:/var/lib/postgresql/data
+    - ./postgres/data:/var/lib/postgresql/data
   mariadb:
     image: "mariadb:10"
     restart: "always"
     ports:
       - "3306:3306"
+    networks:
+      - rnf
     volumes:
-      - /mnt/storage/services/rnf-dev/mdb-data:/var/lib/mysql
-      - /mnt/storage/services/rnf-dev/mdb-logs:/var/log/mysql
-      - /mnt/storage/services/rnf-dev/mdb-conf:/etc/mysql
+      - ./mariadb/data:/var/lib/mysql
+      - ./mariadb/logs:/var/log/mysql
+      - ./mariadb/conf:/etc/mysql
     environment:
-      MYSQL_ROOT_PASSWORD: mdb_root_passwd
-      MYSQL_DATABASE: wp_staging
-      MYSQL_USER: mdb_user
-      MYSQL_PASSWORD: mdb_passwd
+      MYSQL_ROOT_PASSWORD: "${MS_SUPER}"
+      MYSQL_DATABASE: rnf_content
+      MYSQL_USER: "${MS_USER}"
+      MYSQL_PASSWORD: "${MS_PASSWD}"
   apache:
     image: "rnf-php-apache-with-ext:latest"
     restart: "always"
@@ -50,8 +57,10 @@ services:
     ports:
       - "9080:80"
       - "9043:443"
+    networks:
+      - rnf
     links:
       - mariadb
     volumes:
-      - /mnt/storage/services/rnf-dev/apache-docroot:/var/www/html
-      - /mnt/storage/services/rnf-dev/apache-logs:/var/log/www
+      - ./apache/docroot:/var/www/html
+      - ./apache/logs:/var/log/www
