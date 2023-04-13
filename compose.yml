@@ -1,0 +1,57 @@
+version: '3'
+networks:
+  default:
+    external:
+      name: public
+services:
+  postgrest:
+    image: postgrest/postgrest
+    restart: "always"
+    ports:
+      - "7500:3000"
+    environment:
+      PGRST_DB_URI: postgres://pdb_user:pdb_passwd@postgres:5432/rnf_staging
+      PGRST_DB_ANON_ROLE: web_requests
+      PGRST_DB_SCHEMAS: public
+      PGRST_DB_CONFIG: 1
+      PGRST_OPENAPI_SERVER_PROXY_URI: http://127.0.0.1:3000
+    depends_on:
+      - postgres
+  postgres:
+    image: postgis/postgis:10-2.5
+    restart: "always"
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: rnf_staging
+      POSTGRES_USER: pdb_user
+      POSTGRES_PASSWORD: pdb_passwd
+    volumes:
+    - /mnt/storage/services/rnf-dev/pg-data:/var/lib/postgresql/data
+  mariadb:
+    image: "mariadb:10"
+    restart: "always"
+    ports:
+      - "3306:3306"
+    volumes:
+      - /mnt/storage/services/rnf-dev/mdb-data:/var/lib/mysql
+      - /mnt/storage/services/rnf-dev/mdb-logs:/var/log/mysql
+      - /mnt/storage/services/rnf-dev/mdb-conf:/etc/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: mdb_root_passwd
+      MYSQL_DATABASE: wp_staging
+      MYSQL_USER: mdb_user
+      MYSQL_PASSWORD: mdb_passwd
+  apache:
+    image: "rnf-php-apache-with-ext:latest"
+    restart: "always"
+    depends_on:
+      - mariadb
+    ports:
+      - "9080:80"
+      - "9043:443"
+    links:
+      - mariadb
+    volumes:
+      - /mnt/storage/services/rnf-dev/apache-docroot:/var/www/html
+      - /mnt/storage/services/rnf-dev/apache-logs:/var/log/www
