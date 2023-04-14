@@ -21,7 +21,6 @@ services:
     depends_on:
       - postgres
   postgres:
-    image: postgis/postgis:10-2.5
     build: ./postgres
     restart: "always"
     ports:
@@ -30,8 +29,8 @@ services:
       - rnf
     environment:
       POSTGRES_DB: rnf_location
-      POSTGRES_USER: "${PG_USER}"
-      POSTGRES_PASSWORD: "${PG_PASSWD"
+      POSTGRES_USER: ${PG_USER}
+      POSTGRES_PASSWORD: ${PG_PASSWD}
     volumes:
     - ./postgres/data:/var/lib/postgresql/data
   mariadb:
@@ -46,12 +45,11 @@ services:
       - ./mariadb/logs:/var/log/mysql
       - ./mariadb/conf:/etc/mysql
     environment:
-      MYSQL_ROOT_PASSWORD: "${MS_SUPER}"
+      MYSQL_ROOT_PASSWORD: ${MS_SUPER}
       MYSQL_DATABASE: rnf_content
-      MYSQL_USER: "${MS_USER}"
-      MYSQL_PASSWORD: "${MS_PASSWD}"
+      MYSQL_USER: ${MS_USER}
+      MYSQL_PASSWORD: ${MS_PASSWD}
   apache:
-    image: "rnf-php-apache-with-ext:latest"
     build: ./apache
     restart: "always"
     depends_on:
