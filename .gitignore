@@ -2,6 +2,8 @@
 
 apache/logs
 
+backup/*.tgz
+
 mariadb/conf
 mariadb/data
 mariadb/logs
