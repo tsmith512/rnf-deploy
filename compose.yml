@@ -64,3 +64,8 @@ services:
     volumes:
       - ./apache/docroot:/var/www/html
       - ./apache/logs:/var/log/www
+  cftunnel:
+    image: cloudflare/cloudflared:latest
+    command: tunnel run --token ${CFD_TOKEN}
+    networks:
+      - rnf
