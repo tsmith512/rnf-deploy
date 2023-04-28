@@ -33,16 +33,16 @@ tar -xvf backup/restore/docroot.tar -C apache/docroot --transform 's/rnf-prod\//
 echo \#\# Installing Composer and Mapbox dependencies
 
 # Update composer dependencies
-sudo docker exec -w /var/www/html -it $(util/id.sh) /usr/local/bin/composer install
+docker exec -w /var/www/html -it $(util/id.sh) /usr/local/bin/composer install
 
 # Force post-update script from Composer
-sudo docker exec -w /var/www/html -it $(util/id.sh) /usr/local/bin/composer run-script post-update-cmd
+docker exec -w /var/www/html -it $(util/id.sh) /usr/local/bin/composer run-script post-update-cmd
 
 # @TODO: Other docroot folders are ignored. Could also git checkout or
 # update/downgrate dependencies...
 
 echo \#\# Resetting production hostname to match local environment
 
-docker exec -u www-data $(sudo ./util/id.sh) /usr/local/bin/wp-cli search-replace "www.routenotfound.com" $WEBHOST --path=/var/www/html/wp
+docker exec -u www-data $(util/id.sh) /usr/local/bin/wp-cli search-replace "www.routenotfound.com" $WEBHOST --path=/var/www/html/wp
 
 rm -rf backup/restore
