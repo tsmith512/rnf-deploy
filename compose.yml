@@ -65,6 +65,11 @@ services:
     volumes:
       - ./apache/docroot:/var/www/html
       - ./apache/logs:/var/log/www
+    environment:
+      MS_DB: rnf_content
+      MS_USER: ${MS_USER}
+      MS_PASSWD: ${MS_PASSWD}
+      MS_HOST: routenotfound-mariadb-1
   cftunnel:
     image: cloudflare/cloudflared:latest
     command: tunnel run --token ${CFD_TOKEN}

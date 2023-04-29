@@ -25,7 +25,7 @@ psql postgres://$PG_USER:$PG_PASSWD@$(util/ip.sh postgres)/rnf_location < backup
 # Unpack wordpress uploads into the docroot
 echo \#\# Unpack wp-content/uploads directory into docroot
 rm -rf apache/docroot/wp-content/uploads
-tar -xvf backup/restore/docroot.tar -C apache/docroot --transform 's/docroot\///' rnf-prod/wp-content/uploads
+tar -xvf backup/restore/docroot.tar -C apache/docroot --transform 's/docroot\///' docroot/wp-content/uploads
 
 # UNCOMMENT THIS TO RELACE WP-CONFIG
 # tar -xvf backup/restore/docroot.tar -C apache/docroot --transform 's/rnf-prod\///' rnf-prod/wp-config.php
