@@ -24,6 +24,7 @@ psql postgres://$PG_USER:$PG_PASSWD@$(util/ip.sh postgres)/rnf_location < backup
 
 # Unpack wordpress uploads into the docroot
 echo \#\# Unpack wp-content/uploads directory into docroot
+docker exec -w /var/www/html/wp-content $(util/id.sh) chown -R $(id -u):$(id -u) uploads
 rm -rf apache/docroot/wp-content/uploads
 tar -xvf backup/restore/docroot.tar -C apache/docroot --transform 's/docroot\///' docroot/wp-content/uploads
 
@@ -42,7 +43,9 @@ docker exec -w /var/www/html -it $(util/id.sh) /usr/local/bin/composer run-scrip
 # update/downgrate dependencies...
 
 echo \#\# Resetting production hostname to match local environment
-
 docker exec -u www-data $(util/id.sh) /usr/local/bin/wp-cli search-replace "www.routenotfound.com" $WEBHOST --path=/var/www/html/wp
+
+echo \#\# Setting ownership of uploads directory to container www-data
+docker exec -w /var/www/html/wp-content $(util/id.sh) chown -R www-data:www-data uploads
 
 rm -rf backup/restore
