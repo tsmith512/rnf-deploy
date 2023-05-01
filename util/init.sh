@@ -22,10 +22,16 @@ cd apache/docroot/wp-content/themes/rnf-alfa
 git checkout dev
 ln -s ../../../../../.env .env
 
+# @TODO: This didn't work, nvm was still undefined
+echo "Navigate to the theme, nvm install/use, npm install, npx gulp"
 nvm install
 nvm use
 npm install
 npx gulp
+
+# @TODO: Need to make this in a way that doesn't hard-code paths
+#sudo ln -s /home/tsmith/rnf-deploy/rnf.service /etc/systemd/system/rnf.service
+echo Link the systemd service unit and enable
 
 echo Next, start the Compose stack, pull a backup archive, and run util/restore.sh
 
