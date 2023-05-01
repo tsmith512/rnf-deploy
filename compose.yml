@@ -16,7 +16,8 @@ services:
       PGRST_DB_URI: "postgres://${PG_USER}:${PG_PASSWD}@postgres:5432/rnf_location"
       PGRST_DB_ANON_ROLE: web_requests
       PGRST_DB_SCHEMAS: public
-      PGRST_DB_CONFIG: 1
+      PGRST_DB_CONFIG: 0
+      PGRST_JWT_SECRET: ${PGRST_SECRET}
       PGRST_OPENAPI_SERVER_PROXY_URI: http://127.0.0.1:3000
     depends_on:
       - postgres
@@ -64,3 +65,14 @@ services:
     volumes:
       - ./apache/docroot:/var/www/html
       - ./apache/logs:/var/log/www
+      - ./apache/uploads.ini:/usr/local/etc/php/conf.d/uploads.ini:ro
+    environment:
+      MS_DB: rnf_content
+      MS_USER: ${MS_USER}
+      MS_PASSWD: ${MS_PASSWD}
+      MS_HOST: routenotfound-mariadb-1
+  cftunnel:
+    image: cloudflare/cloudflared:latest
+    command: tunnel run --token ${CFD_TOKEN}
+    networks:
+      - rnf

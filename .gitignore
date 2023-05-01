@@ -1,8 +1,10 @@
 .env
 
 apache/logs
+apache/docroot
 
 backup/*.tgz
+backup/current
 
 mariadb/conf
 mariadb/data
