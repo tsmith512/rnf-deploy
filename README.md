@@ -16,3 +16,6 @@
   - Apache: https://routenotfound-apache-1:443
     - With option "No TLS Verify" enabled
   - (WIP: WordPress HTTP??)
+- The rnf-location-service Worker needs a `DB_ADMIN_JWT` env/secret
+  - Payload is `{ "role": "admin_requests" }`
+  - The signature is whatever you put in `.env`
