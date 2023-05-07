@@ -27,17 +27,19 @@ See also:
 - Run Ubuntu setup for docker and ensure current user in `docker` group
 - Clone this repo
 - Create/populate `~.aws/credentials` for its owner
-  - User will need R2 credentials
+  - User will need R2 credentials (read/write)
 - Create `.env` from `.env.sample` in the root
   - Provision a Cloudflare tunnel token
 - Download the latest backup archive to `backup/`
 - Run `util/init.sh` (sudo password will be immediately requested)
-  - TODO: This breaks half-way through restore because there's no wp-config at this point
 - Go to Cloudflare Zero Trust and add the following routes:
   - PostgREST: http://routenotfound-postgrest-1:3000
   - Apache: https://routenotfound-apache-1:443
     - With option "No TLS Verify" enabled
-  - (WIP: WordPress HTTP??)
 - The rnf-location-service Worker needs a `DB_ADMIN_JWT` env/secret
   - Payload is `{ "role": "admin_requests" }`
   - The signature is whatever you put in `.env`
+- Add these two lines to cron:
+  - `m    h  dom mon dow   command`
+  - `*/15 *  *   *   *     curl -o - https://www.routenotfound.com/wp-cron.php`
+  - `0    6  *   *   1,4   ~/rnf-deploy/backup.sh`
