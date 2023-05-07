@@ -37,7 +37,7 @@ pg_dump --schema-only --no-owner postgres://$PG_USER:$PG_PASSWD@$(util/ip.sh pos
 echo Combining and compressing backup components
 tar -zcf backup/backup-$TODAY.tgz -C backup/current docroot.tar database.sql location_history.psql structure.psql
 
-# Send to S3
-#s3cmd put ~/rnf/backups/backup-$TODAY.tgz s3://tsmith-backups/routenotfound/
+# Send to R2 (will be automatically purged after 36 days by lifecycle rule)
+aws s3 cp ./backup/backup-$TODAY.tgz s3://backups-rnf/ --endpoint-url ${R2_ENDPOINT}
 
 # And leave them there until the next execution.
