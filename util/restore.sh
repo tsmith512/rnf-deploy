@@ -28,9 +28,6 @@ docker exec -w /var/www/html/wp-content $(util/id.sh) chown -R $(id -u):$(id -u)
 rm -rf apache/docroot/wp-content/uploads
 tar -xvf backup/restore/docroot.tar -C apache/docroot --transform 's/docroot\///' docroot/wp-content/uploads
 
-# UNCOMMENT THIS TO RELACE WP-CONFIG
-# tar -xvf backup/restore/docroot.tar -C apache/docroot --transform 's/rnf-prod\///' rnf-prod/wp-config.php
-
 echo \#\# Installing Composer and Mapbox dependencies
 
 # Update composer dependencies
