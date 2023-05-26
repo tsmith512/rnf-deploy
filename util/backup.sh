@@ -40,4 +40,5 @@ tar -zcf backup/backup-$TODAY.tgz -C backup/current docroot.tar database.sql loc
 # Send to R2 (will be automatically purged after 36 days by lifecycle rule)
 aws s3 cp ./backup/backup-$TODAY.tgz s3://backups-rnf/ --endpoint-url ${R2_ENDPOINT}
 
-# And leave them there until the next execution.
+# Leave the pieces there until the next execution, but delete the output archive
+rm ./backup/backup-$TODAY.tgz
