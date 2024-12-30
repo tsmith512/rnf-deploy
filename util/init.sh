@@ -6,6 +6,9 @@ cd ${0%/*}/..
 # Read project env vars
 export $(grep -v '^#' .env | xargs)
 
+# Load in the AWS creds for s3cmd
+export AWS_CREDENTIAL_FILE=~/.aws/credentials
+
 # Stuff we need
 sudo apt-get install emacs-nox s3cmd mariadb-client postgresql-client awscli jq mc byobu
 
