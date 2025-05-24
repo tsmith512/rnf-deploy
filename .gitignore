@@ -1,7 +1,8 @@
 .env
 
 apache/logs
-apache/docroot
+# This will be a submodule now
+# apache/docroot
 
 backup/*.tgz
 backup/current
