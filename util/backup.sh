@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -euo pipefail
+
 # Move to the root of rnf-deploy
 cd ${0%/*}/..
 
@@ -30,3 +32,5 @@ tar -czf "$BACKUP_FILE" -C apache docroot -C ../backup/current database.sql loca
 aws s3 cp "$BACKUP_FILE" s3://backups-rnf/ --endpoint-url ${R2_ENDPOINT}
 
 rm "$BACKUP_FILE"
+
+curl -X POST $BACKUP_WEBHOOK
